@@ -1,0 +1,74 @@
+
+<div class="container" style=" background-color: #f9f9f9; border-radius: 10px; width: 100%;">
+    <style>
+        @media screen and (max-width: 732px) {
+            .item-image{
+                width: 100%;
+                height: 20%;
+                border-radius: 5px 5px 0 0;
+            }
+            .card{
+                display: block;
+                background-color: #ffffff;
+                border-radius: 5px;
+            }
+            .desc{
+                width: 100%;
+            }
+            .container{
+                background-color: #f9f9f9;
+                border-radius: 10px;
+                width: 100%;
+            }
+        }
+    </style>
+    <header class="header" style="background-color: #ED3237;
+        display: block;
+        color: #ffffff;
+        text-align: center;
+        border-radius: 10px 10px 0 0;">
+        <h3><a style="text-decoration: none;
+            color: #ffffff;" href="https://fuudzie.com" target="blank">FUUDZIE</a></h3>
+        <p>Get the best deal in products</p>
+    </header>
+    <div class="body" style="display: block;
+        padding: 30px;">
+        <p style="margin-bottom: 30px;">Hi {{fullName}}</p>
+
+        <p>You have placed an order on Fuudzie.com for the following items</p>
+
+        {% for item in  items %}
+        <div class="card" style="display: block;
+            background-color: #ffffff;
+            border-radius: 5px; margin-bottom: 20px;">
+            <img class="item-image" src="{{item['mealImages'][0]}}" alt="Item Image" style="width: 20%;
+            height: 200px;
+            float: left;
+            border-radius: 5px 0 0 5px;">
+            <div class="desc" style="padding: 20px;">
+                <h4 class="name">{{item['name']}}</h4>
+                <p class="des">{{item['description']}}</p>
+                <p> Quantity: {{item['quantity']}} portions</p>
+                <p> Amount: {{item['pricePerOrderSize']}}</p>
+            </div>
+        </div>
+        {%endfor%}
+        <p>Subtotal {{subtotal}}</p>
+        <p>Delivery Fee {{delvfee}}</p>
+        <p style="margin-bottom: 20px;">Total {{subtotal + delvfee}}</p>
+
+        <p>Please remember to update via your app or the web portal once the order is delivered.</p>
+        <p>Regards, <br /> Team Fuudzie.</p>
+    </div>
+    <footer class="footer" style="background-color: #f16165;
+        display: block;
+        color: #ffffff;
+        text-align: center;
+        border-radius: 0px 0px 10px 10px;
+        height: 50px;">
+        <div>
+            &copy; 2020 Fuudzie. All Rights Reserved.
+        </div>
+    </footer>
+    
+</div>

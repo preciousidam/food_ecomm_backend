@@ -5,7 +5,7 @@ import traceback
 
 from fuudzie.models.Cart import Carts
 from fuudzie.models.Meal import Meals, MealEmbedded
-from fuudzie.models.AppSettings import AppSettings
+from fuudzie.models.AppSettings import Appsettings
 from fuudzie.util import calculateDelvFee
 
 
@@ -21,7 +21,7 @@ def addToCart(path):
     longitude = None
     cart = None
     address = None
-    settings = AppSettings.objects().get()
+    settings = Appsettings.objects().get()
 
     # Check if method is POST and retrive body of request
     if request.method == 'POST':
@@ -175,7 +175,7 @@ def deleteFromCart():
     msg = ""
     latitude = None
     longitude = None
-    settings = AppSettings.objects().get()
+    settings = Appsettings.objects().get()
 
 
     if request.method == 'POST':

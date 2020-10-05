@@ -2,7 +2,7 @@ from mongoengine import *
 from datetime import datetime as dt
 
 
-class AppSettings(Document):
+class Appsettings(Document):
     _id = StringField()
     transactionPercentage = IntField()
     deliveryPromo = BooleanField()

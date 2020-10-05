@@ -60,7 +60,7 @@ def getDevlFee():
             for item in cartItems:
                 lat = item.vendor.cordinates['latitude']
                 lng = item.vendor.cordinates['longitude']
-                delPrice = calculateDelvFee((coord['lat'],coord['lng']),(lat,lng))
+                delPrice = 0 if settings.deliveryPromo == True else calculateDelvFee((coord['lat'],coord['lng']),(lat,lng))
                 totalDelvFee = totalDelvFee + delPrice
                 deliveryFees.update({str(item.vendor.pk): delPrice})
 
@@ -69,7 +69,7 @@ def getDevlFee():
                 cart.update(
                     set__deliveryFee=totalDelvFee,
                     set__deliveryLocation= [address,{"latitude": coord['lat'], "longitude": coord['lng']}],
-                    set__feesPerVendor= 0 if settings.deliveryPromo == True else deliveryFees
+                    set__feesPerVendor= deliveryFees
                 )
                 
                 cart.save()

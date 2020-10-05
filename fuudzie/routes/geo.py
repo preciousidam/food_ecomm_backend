@@ -5,6 +5,7 @@ from fuudzie.util import getAddress, getCoordinates, calculateDelvFee
 from fuudzie.models.Cart import Carts
 from fuudzie.models.Order import Orders
 from fuudzie.models.Meal import MealEmbedded, Meals
+from fuudzie.models.AppSettings import Appsettings
 
 
 geoRoutes = Blueprint('geo', __name__, url_prefix='/api/v2/geo')

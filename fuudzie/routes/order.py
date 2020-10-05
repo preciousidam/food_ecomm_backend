@@ -167,7 +167,7 @@ def get_order_by_status(path):
     try:
         orders = []
 
-        for row in Orders.objects(status='paid'):
+        for row in Orders.objects(status=path):
             orders.append(row)
 
         if len(orders) <= 0:

@@ -5,6 +5,7 @@ import traceback
 
 from fuudzie.models.Cart import Carts
 from fuudzie.models.Meal import Meals, MealEmbedded
+from fuudzie.models.AppSettings import AppSettings
 from fuudzie.util import calculateDelvFee
 
 
@@ -20,6 +21,7 @@ def addToCart(path):
     longitude = None
     cart = None
     address = None
+    settings = AppSettings.objects().get()
 
     # Check if method is POST and retrive body of request
     if request.method == 'POST':
@@ -82,8 +84,8 @@ def addToCart(path):
                     add_to_set__cartItems=mealEmbedded, 
                     inc__totalQuantity=1,
                     set__totalPrice= cart.totalPrice + (meal.pricePerOrderSize * float(qty)),
-                    set__deliveryFee=totalDelvFee,
-                    set__feesPerVendor=deliverFees
+                    set__deliveryFee= 0 if settings.deliveryPromo == True else totalDelvFee,
+                    set__feesPerVendor= 0 if settings.deliveryPromo == True else deliverFees
                 )
                 cart.save()
                 cart.reload()
@@ -104,10 +106,10 @@ def addToCart(path):
                 totalQuantity = 1,
                 totalPrice = meal.pricePerOrderSize * mealEmbedded.quantity,
                 status = 'open',
-                deliveryFee=delPrice,
+                deliveryFee=0 if settings.deliveryPromo == True else delPrice,
                 fixedFee = False,
                 deliveryLocation = {"latitude": latitude, "longitude": longitude},
-                feesPerVendor=deliverFees
+                feesPerVendor=0 if settings.deliveryPromo == True else deliverFees
             )
             cart.save()
             
@@ -173,6 +175,7 @@ def deleteFromCart():
     msg = ""
     latitude = None
     longitude = None
+    settings = AppSettings.objects().get()
 
 
     if request.method == 'POST':
@@ -212,7 +215,7 @@ def deleteFromCart():
             exist = cart.cartItems.filter(businessName=meal.businessName).count()   
             
             if exist <= 0:
-                delPrice = cart.feesPerVendor.get(str(meal.vendor.pk))
+                delPrice = 0 if settings.deliveryPromo == True else cart.feesPerVendor.get(str(meal.vendor.pk))
                 cart.update(
                     inc__deliveryFee=(delPrice * -1)
                 )

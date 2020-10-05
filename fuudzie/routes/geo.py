@@ -79,7 +79,7 @@ def getDevlFee():
             
         
         else:
-            return jsonify({'data':{'deliveryFee': cart.deliveryFee}, 'status': 'success'}), 200
+            return jsonify({'data':{'deliveryFee': cart.deliveryFee, 'coord': coord, 'address': address}, 'msg': 'New delivery fee calculated', 'status': 'ok'}), 200
         
         
 

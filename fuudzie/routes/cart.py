@@ -47,7 +47,7 @@ def addToCart(path):
         cart = Carts.objects(user=ObjectId(userId)).first()
 
         # calculate delivery fee
-        delPrice = calculateDelvFee((meal.cordinates.get('latitude'),meal.cordinates.get('longitude')),(latitude,longitude))
+        delPrice = 0 if settings.deliveryPromo == True calculateDelvFee((meal.cordinates.get('latitude'),meal.cordinates.get('longitude')),(latitude,longitude))
 
         
         mealEmbedded = MealEmbedded(
@@ -84,8 +84,8 @@ def addToCart(path):
                     add_to_set__cartItems=mealEmbedded, 
                     inc__totalQuantity=1,
                     set__totalPrice= cart.totalPrice + (meal.pricePerOrderSize * float(qty)),
-                    set__deliveryFee= 0 if settings.deliveryPromo == True else totalDelvFee,
-                    set__feesPerVendor= 0 if settings.deliveryPromo == True else deliverFees
+                    set__deliveryFee=totalDelvFee,
+                    set__feesPerVendor= deliverFees
                 )
                 cart.save()
                 cart.reload()
@@ -106,10 +106,10 @@ def addToCart(path):
                 totalQuantity = 1,
                 totalPrice = meal.pricePerOrderSize * mealEmbedded.quantity,
                 status = 'open',
-                deliveryFee=0 if settings.deliveryPromo == True else delPrice,
+                deliveryFee=delPrice,
                 fixedFee = False,
                 deliveryLocation = {"latitude": latitude, "longitude": longitude},
-                feesPerVendor=0 if settings.deliveryPromo == True else deliverFees
+                feesPerVendor= deliverFees
             )
             cart.save()
             
@@ -185,7 +185,6 @@ def deleteFromCart():
         latitude = request.json.get('latitude')
         longitude = request.json.get('longitude')
     
-    print(request.get_json())
 
     if userId == None or  mealId == None or qty == None:
         return jsonify({"status": "failed", "msg": "Bad request some fields are missing from request body"}), 400

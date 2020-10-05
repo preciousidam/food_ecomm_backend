@@ -5,7 +5,6 @@ from fuudzie.util import getAddress, getCoordinates, calculateDelvFee
 from fuudzie.models.Cart import Carts
 from fuudzie.models.Order import Orders
 from fuudzie.models.Meal import MealEmbedded, Meals
-from fuudzie.models.AppSettings import Appsettings
 
 
 geoRoutes = Blueprint('geo', __name__, url_prefix='/api/v2/geo')
@@ -49,7 +48,7 @@ def getDevlFee():
         
         cart = Carts.objects(user=ObjectId(id)).first()
         
-        if cart:
+        if cart and not settings.deliveryPromo:
             if coord['lat'] == cart.deliveryLocation.get('latitude') and coord['lng'] == cart.deliveryLocation.get('longitude'):
                 return jsonify({'data': {'deliveryFee': cart.deliveryFee, 'coord': coord, 'address': address}, 'msg': 'New delivery fee calculated', 'status': 'ok'}), 200
 
@@ -60,7 +59,7 @@ def getDevlFee():
             for item in cartItems:
                 lat = item.vendor.cordinates['latitude']
                 lng = item.vendor.cordinates['longitude']
-                delPrice = 0 if settings.deliveryPromo == True else calculateDelvFee((coord['lat'],coord['lng']),(lat,lng))
+                delPrice = calculateDelvFee((coord['lat'],coord['lng']),(lat,lng))
                 totalDelvFee = totalDelvFee + delPrice
                 deliveryFees.update({str(item.vendor.pk): delPrice})
 
@@ -69,7 +68,7 @@ def getDevlFee():
                 cart.update(
                     set__deliveryFee=totalDelvFee,
                     set__deliveryLocation= [address,{"latitude": coord['lat'], "longitude": coord['lng']}],
-                    set__feesPerVendor= deliveryFees
+                    set__feesPerVendor=deliveryFees
                 )
                 
                 cart.save()

@@ -47,7 +47,7 @@ def addToCart(path):
         cart = Carts.objects(user=ObjectId(userId)).first()
 
         # calculate delivery fee
-        delPrice = 0 if settings.deliveryPromo == True calculateDelvFee((meal.cordinates.get('latitude'),meal.cordinates.get('longitude')),(latitude,longitude))
+        delPrice = 0 if settings.deliveryPromo == True else calculateDelvFee((meal.cordinates.get('latitude'),meal.cordinates.get('longitude')),(latitude,longitude))
 
         
         mealEmbedded = MealEmbedded(

@@ -39,7 +39,7 @@ pymongo==3.10.1
 pyparsing==2.4.7
 python-bsonjs==0.2.0
 python-dotenv==0.13.0
-PyYAML==5.3.1
+PyYAML==5.4
 requests==2.23.0
 shellescape==3.8.1
 six==1.14.0

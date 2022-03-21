@@ -47,7 +47,7 @@ toml==0.10.0
 tox==3.15.0
 urllib3==1.25.9
 virtualenv==20.0.20
-waitress==1.4.3
+waitress==2.1.1
 Werkzeug==1.0.1
 WTForms==2.3.1
 zipp==3.1.0
